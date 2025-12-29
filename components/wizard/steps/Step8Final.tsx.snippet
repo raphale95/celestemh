@@ -1,0 +1,33 @@
+
+    const handleDownloadPDF = async () => {
+        setIsSubmitting(true);
+        try {
+            const response = await fetch('/api/finalize', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-action': 'download-pdf' // Custom header to signal PDF download only
+                },
+                body: JSON.stringify(state),
+            });
+
+            if (response.ok) {
+                // Handle Blob response
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Devis_Celeste_${state.id.slice(0,6)}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } else {
+                alert("Erreur lors de la génération du PDF.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Erreur technique lors du téléchargement.");
+        }
+        setIsSubmitting(false);
+    };

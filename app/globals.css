@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #F9F5F0;
+  /* Cream background */
+  --foreground: #4A151F;
+  /* Burgundy text */
+  --celeste-burgundy: #4A151F;
+  --celeste-gold: #C5A059;
+  --celeste-cream: #F9F5F0;
+  --celeste-text: #2D2426;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: 'Lato', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+
+  /* Brand Colors */
+  --color-celeste-main: #800020;
+  /* Classic Wine/Burgundy */
+  --color-celeste-light: #A33045;
+  /* Lighter Wine */
+  --color-celeste-gold: #C5A059;
+  /* Gold */
+  --color-celeste-cream: #F9F5F0;
+  /* Cream */
+  --color-celeste-dark: #4A0410;
+  /* Darker Wine */
+  --color-celeste-text: #2D2426;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #2A0A0E;
+    --foreground: #F9F5F0;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--celeste-text);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  color: var(--celeste-burgundy);
+}

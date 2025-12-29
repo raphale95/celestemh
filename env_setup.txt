@@ -1,0 +1,6 @@
+IMPORTANT : Pour que l'envoi d'emails fonctionne, vous devez créer un fichier nommé ".env.local" à la racine du projet (dans le dossier celeste-wizard) et y copier le contenu ci-dessous en remplaçant les valeurs.
+
+RESEND_API_KEY=re_123456789... (Votre clé API Resend)
+MANAGER_EMAIL=lavignepierre60@gmail.com
+FROM_EMAIL=onboarding@resend.dev
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
