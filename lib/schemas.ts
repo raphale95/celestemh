@@ -30,6 +30,7 @@ export const participantsSchema = z.object({
         .min(8, "Minimum 8 participants")
         .max(29, "Maximum 29 participants"),
     formula: z.enum(['essentiel', 'venez_leger', 'cocooning']),
+    privatization: z.boolean().default(false),
 });
 
 export const roomSchema = z.object({

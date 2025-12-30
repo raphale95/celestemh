@@ -15,6 +15,7 @@ export function Step6Material() {
     const { state, dispatch } = useQuote();
     const { selection, pricing } = state;
     const isEssentiel = selection.formula === 'essentiel';
+    const isCocooning = selection.formula === 'cocooning';
 
     const { register, handleSubmit, watch } = useForm<MaterialsFormData>({
         resolver: zodResolver(materialsSchema) as any,
@@ -30,6 +31,11 @@ export function Step6Material() {
         dispatch({ type: 'NEXT_STEP' });
     };
 
+    // Determine if there are costs to pay
+    const hasEquipmentCost = watch('individualEquipment') && isEssentiel;
+    const hasAudioVideoCost = watch('audioVideo') && !isCocooning;
+    const showPaymentOptions = hasEquipmentCost;
+
     return (
         <div className="space-y-6">
             <div className="text-center mb-8">
@@ -40,12 +46,12 @@ export function Step6Material() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
                 {/* Materiel Individuel */}
-                <Card className={cn("p-6 border-2 transition-all hover:shadow-sm bg-white", isEssentiel ? "border-celeste-100" : "border-celeste-main bg-celeste-50/30")}>
+                <Card className={cn("p-6 border-2 transition-all hover:shadow-sm bg-white", isEssentiel ? "border-celeste-100" : "border-emerald-100 bg-emerald-50/20")}>
                     <div className="flex items-start justify-between">
                         <div className="space-y-1">
                             <h3 className="font-bold font-serif text-lg text-celeste-main">Matériel de pratique individuel</h3>
                             <p className="text-sm text-celeste-text">Tapis de yoga, coussins, couvertures.</p>
-                            {!isEssentiel && <span className="inline-block bg-celeste-100 text-celeste-main text-xs px-2 py-0.5 rounded-full font-bold mt-1">INCLUS DANS VOTRE FORMULE</span>}
+                            {!isEssentiel && <span className="inline-block bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full font-bold mt-1">INCLUS DANS VOTRE FORMULE</span>}
                         </div>
 
                         {isEssentiel ? (
@@ -63,39 +69,44 @@ export function Step6Material() {
                                 </div>
                             </div>
                         ) : (
-                            <div className="text-celeste-gold font-bold">0 €</div>
+                            <div className="text-emerald-600 font-bold">0 €</div>
                         )}
                     </div>
                 </Card>
 
                 {/* Sono / Video */}
-                <Card className="p-6 border-2 border-celeste-100 transition-all hover:bg-celeste-50/50 bg-white">
+                <Card className={cn("p-6 border-2 transition-all hover:shadow-sm bg-white", (!isCocooning) ? "border-celeste-100" : "border-emerald-100 bg-emerald-50/20")}>
                     <div className="flex items-start justify-between">
                         <div className="space-y-1">
                             <h3 className="font-bold font-serif text-lg text-celeste-main">Pack Sono & Vidéo</h3>
                             <p className="text-sm text-celeste-text">Enceinte puissante, micro, vidéoprojecteur.</p>
+                            {isCocooning && <span className="inline-block bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full font-bold mt-1">INCLUS FORMULE COCOONING</span>}
                         </div>
-                        <div className="flex flex-col items-end">
-                            <div className="flex items-center space-x-2">
-                                <input
-                                    type="checkbox"
-                                    id="audioVideo"
-                                    {...register('audioVideo')}
-                                    className="h-5 w-5 rounded border-celeste-200 text-celeste-main focus:ring-celeste-gold"
-                                />
-                                <Label htmlFor="audioVideo" className="font-bold text-base cursor-pointer text-celeste-main">
-                                    +{PRICES.OPTIONS.sonoVideo} € <span className="text-sm font-normal">/ séjour</span>
-                                </Label>
+                        {isCocooning ? (
+                            <div className="text-emerald-600 font-bold">0 €</div>
+                        ) : (
+                            <div className="flex flex-col items-end">
+                                <div className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        id="audioVideo"
+                                        {...register('audioVideo')}
+                                        className="h-5 w-5 rounded border-celeste-200 text-celeste-main focus:ring-celeste-gold"
+                                    />
+                                    <Label htmlFor="audioVideo" className="font-bold text-base cursor-pointer text-celeste-main">
+                                        +{PRICES.OPTIONS.sonoVideo} € <span className="text-sm font-normal">/ séjour</span>
+                                    </Label>
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </Card>
 
                 {/* Qui paye le matériel ? */}
-                {(watch('individualEquipment') || watch('audioVideo')) && (
+                {showPaymentOptions && (
                     <Card className="p-6 border border-celeste-100 bg-celeste-50/50">
-                        <h3 className="font-bold font-serif text-lg text-celeste-main mb-2">Qui prend en charge ces frais ?</h3>
-                        <p className="text-sm text-celeste-light mb-4">Vous pouvez choisir d'intégrer ces coûts à votre charge ou de les laisser aux participants.</p>
+                        <h3 className="font-bold font-serif text-lg text-celeste-main mb-2">Qui prend en charge le matériel individuel ?</h3>
+                        <p className="text-sm text-celeste-light mb-4">Pour info : Le Pack Sono & Vidéo est toujours à la charge de l'organisateur.</p>
 
                         <div className="flex gap-4">
                             <label className={cn(
@@ -127,7 +138,7 @@ export function Step6Material() {
                                     {...register('materialPaidBy')}
                                 />
                                 <div className="font-bold text-celeste-main">Les Participants</div>
-                                <div className="text-xs text-celeste-light">Ajouté à leur tarif</div>
+                                <div className="text-xs text-celeste-light">Payé sur place (0€ devis)</div>
                             </label>
                         </div>
                     </Card>

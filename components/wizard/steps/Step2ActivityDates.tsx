@@ -136,9 +136,14 @@ export function Step2ActivityDates() {
                 </div>
 
                 {(nights > 0) && (
-                    <Card className="p-4 bg-celeste-50 border-celeste-100 flex justify-center text-celeste-main font-serif font-bold italic">
-                        Durée du séjour : {nights} nuits
-                    </Card>
+                    <div className="space-y-4">
+                        <Card className="p-4 bg-celeste-50 border-celeste-100 flex justify-center text-celeste-main font-serif font-bold italic">
+                            Durée du séjour : {nights} nuits
+                        </Card>
+                        <p className="text-xs text-center text-celeste-light italic">
+                            Les horaires d'arrivée et de départ influencent le tarif final mais ne sont pas chiffrés dans ce devis.
+                        </p>
+                    </div>
                 )}
 
                 <div className="flex justify-between pt-4">

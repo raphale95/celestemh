@@ -43,7 +43,7 @@ export function Stepper({ currentStep, totalSteps }: StepperProps) {
                                 "hidden sm:block text-xs font-medium font-serif",
                                 isCurrent ? "text-celeste-main font-bold" : "text-slate-400"
                             )}>
-                                {getStepLabel(stepNum)}
+                                {getStepLabel(stepNum, totalSteps)}
                             </span>
                         </div>
                     );
@@ -53,16 +53,33 @@ export function Stepper({ currentStep, totalSteps }: StepperProps) {
     );
 }
 
-function getStepLabel(step: number): string {
-    switch (step) {
-        case 1: return "Infos";
-        case 2: return "Dates";
-        case 3: return "Verif";
-        case 4: return "Groupe";
-        case 5: return "Salle";
-        case 6: return "Matériel";
-        case 7: return "Interv.";
-        case 8: return "Final";
-        default: return "";
+function getStepLabel(step: number, totalSteps: number): string {
+    const isPrivatization = totalSteps === 9;
+
+    if (isPrivatization) {
+        switch (step) {
+            case 1: return "Infos";
+            case 2: return "Dates";
+            case 3: return "Verif";
+            case 4: return "Groupe";
+            case 5: return "Privat.";
+            case 6: return "Options";
+            case 7: return "Salles";
+            case 8: return "Interv.";
+            case 9: return "Final";
+            default: return "";
+        }
+    } else {
+        switch (step) {
+            case 1: return "Infos";
+            case 2: return "Dates";
+            case 3: return "Verif";
+            case 4: return "Groupe";
+            case 5: return "Options";
+            case 6: return "Salles";
+            case 7: return "Interv.";
+            case 8: return "Final";
+            default: return "";
+        }
     }
 }

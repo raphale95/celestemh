@@ -1,5 +1,7 @@
 "use client";
 
+import Image from 'next/image';
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -49,44 +51,84 @@ export function Step5Room() {
                     <div
                         onClick={() => setValue('room', 'pina')}
                         className={cn(
-                            "cursor-pointer rounded-xl border-2 p-4 transition-all hover:shadow-md bg-white",
+                            "cursor-pointer rounded-xl border-2 overflow-hidden transition-all hover:shadow-md bg-white group",
                             selectedRoom === 'pina'
                                 ? "border-celeste-main bg-celeste-50 ring-1 ring-celeste-main"
                                 : "border-celeste-100 hover:border-celeste-200"
                         )}
                     >
-                        <h3 className="text-lg font-bold font-serif text-celeste-main mb-1">Salle Pina</h3>
-                        <div className="text-xl font-bold text-celeste-gold mb-2">{getPrice('pina')} € <span className="text-sm font-normal text-celeste-light">/jour</span></div>
-                        <p className="text-xs text-celeste-text">Grand espace lumineux avec parquet, idéal pour les grands groupes.</p>
+                        <div className="relative h-48 w-full">
+                            <Image
+                                src="/images/pina_new.jpg"
+                                alt="Salle Pina"
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                        </div>
+                        <div className="p-4">
+                            <h3 className="text-lg font-bold font-serif text-celeste-main mb-1">Salle Pina</h3>
+                            <div className="text-xl font-bold text-celeste-gold mb-2">{getPrice('pina')} € <span className="text-sm font-normal text-celeste-light">/jour</span></div>
+                            <p className="text-xs text-celeste-text">Grand espace lumineux avec parquet, idéal pour les grands groupes.</p>
+                        </div>
                     </div>
 
                     <div
                         onClick={() => setValue('room', 'patio')}
                         className={cn(
-                            "cursor-pointer rounded-xl border-2 p-4 transition-all hover:shadow-md bg-white",
+                            "cursor-pointer rounded-xl border-2 overflow-hidden transition-all hover:shadow-md bg-white group",
                             selectedRoom === 'patio'
                                 ? "border-celeste-main bg-celeste-50 ring-1 ring-celeste-main"
                                 : "border-celeste-100 hover:border-celeste-200"
                         )}
                     >
-                        <h3 className="text-lg font-bold font-serif text-celeste-main mb-1">Le Patio</h3>
-                        <div className="text-xl font-bold text-celeste-gold mb-2">{getPrice('patio')} € <span className="text-sm font-normal text-celeste-light">/jour</span></div>
-                        <p className="text-xs text-celeste-text">Espace intime et chaleureux, parfait pour la méditation.</p>
+                        <div className="relative h-48 w-full">
+                            <Image
+                                src="/images/patio_new.jpg"
+                                alt="Le Patio"
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                        </div>
+                        <div className="p-4">
+                            <h3 className="text-lg font-bold font-serif text-celeste-main mb-1">Le Patio</h3>
+                            <div className="text-xl font-bold text-celeste-gold mb-2">{getPrice('patio')} € <span className="text-sm font-normal text-celeste-light">/jour</span></div>
+                            <p className="text-xs text-celeste-text">Espace intime et chaleureux, parfait pour la méditation.</p>
+                        </div>
                     </div>
 
                     <div
                         onClick={() => setValue('room', 'pina_patio')}
                         className={cn(
-                            "cursor-pointer rounded-xl border-2 p-4 transition-all hover:shadow-md bg-white",
+                            "cursor-pointer rounded-xl border-2 overflow-hidden transition-all hover:shadow-md bg-white group",
                             selectedRoom === 'pina_patio'
                                 ? "border-celeste-main bg-celeste-50 ring-1 ring-celeste-main"
                                 : "border-celeste-100 hover:border-celeste-200"
                         )}
                     >
-                        <h3 className="text-lg font-bold font-serif text-celeste-main mb-1">Pina + Patio</h3>
-                        {/* @ts-ignore */}
-                        <div className="text-xl font-bold text-celeste-gold mb-2">{getPrice('pina_patio')} € <span className="text-sm font-normal text-celeste-light">/jour</span></div>
-                        <p className="text-xs text-celeste-text">Profitez des deux espaces pour une flexibilité maximale.</p>
+                        <div className="relative h-48 w-full flex">
+                            <div className="relative w-1/2 h-full">
+                                <Image
+                                    src="/images/pina_new.jpg"
+                                    alt="Salle Pina"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                            <div className="relative w-1/2 h-full">
+                                <Image
+                                    src="/images/patio_new.jpg"
+                                    alt="Le Patio"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        </div>
+                        <div className="p-4">
+                            <h3 className="text-lg font-bold font-serif text-celeste-main mb-1">Pina + Patio</h3>
+                            {/* @ts-ignore */}
+                            <div className="text-xl font-bold text-celeste-gold mb-2">{getPrice('pina_patio')} € <span className="text-sm font-normal text-celeste-light">/jour</span></div>
+                            <p className="text-xs text-celeste-text">Profitez des deux espaces pour une flexibilité maximale.</p>
+                        </div>
                     </div>
                 </div>
 

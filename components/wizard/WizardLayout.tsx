@@ -12,10 +12,14 @@ import { Step5Room } from './steps/Step5Room';
 import { Step6Material } from './steps/Step6Material';
 import { Step7Intervenants } from './steps/Step7Intervenants';
 import { Step8Final } from './steps/Step8Final';
+import { StepPrivatizationPresentation } from './steps/StepPrivatizationPresentation';
 
 export function WizardLayout() {
     const { state } = useQuote();
-    const { step } = state;
+    const { step, selection } = state;
+
+    const showPrivatization = selection.privatization;
+    const totalSteps = showPrivatization ? 9 : 8;
 
     return (
         <div className="min-h-screen bg-celeste-cream pb-20 font-sans">
@@ -33,7 +37,7 @@ export function WizardLayout() {
                         </div>
                         <div className="flex flex-col">
                             <span className="font-serif font-bold text-3xl text-celeste-main leading-tight">Céleste</span>
-                            <span className="text-sm text-celeste-light tracking-widest uppercase">Maison d'Hôtes</span>
+                            <span className="text-sm text-celeste-light tracking-widest uppercase">38470 Chasselay</span>
                         </div>
                     </div>
                     <div className="hidden sm:block text-sm text-celeste-text/60 italic border-l border-celeste-100 pl-4">Simulateur de Devis</div>
@@ -42,7 +46,7 @@ export function WizardLayout() {
 
             <main className="max-w-6xl mx-auto px-4 py-8">
                 <div className="mb-8">
-                    <Stepper currentStep={step} totalSteps={8} />
+                    <Stepper currentStep={step} totalSteps={totalSteps} />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -53,10 +57,23 @@ export function WizardLayout() {
                             {step === 2 && <Step2ActivityDates />}
                             {step === 3 && <Step3Recap />}
                             {step === 4 && <Step4Participants />}
-                            {step === 5 && <Step5Room />}
-                            {step === 6 && <Step6Material />}
-                            {step === 7 && <Step7Intervenants />}
-                            {step === 8 && <Step8Final />}
+
+                            {showPrivatization ? (
+                                <>
+                                    {step === 5 && <StepPrivatizationPresentation />}
+                                    {step === 6 && <Step6Material />}
+                                    {step === 7 && <Step5Room />}
+                                    {step === 8 && <Step7Intervenants />}
+                                    {step === 9 && <Step8Final />}
+                                </>
+                            ) : (
+                                <>
+                                    {step === 5 && <Step6Material />}
+                                    {step === 6 && <Step5Room />}
+                                    {step === 7 && <Step7Intervenants />}
+                                    {step === 8 && <Step8Final />}
+                                </>
+                            )}
                         </div>
                     </div>
 

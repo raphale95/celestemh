@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { QuoteState } from '@/lib/types';
-import { getFinalEmailHtml } from '@/lib/email-templates';
+import { getFinalEmailHtml, getStepEmailHtml } from '@/lib/email-templates';
 import { renderToStream } from '@react-pdf/renderer';
 import { QuotePdf } from '@/lib/pdf/QuotePdf';
 import React from 'react';
@@ -9,23 +9,28 @@ import React from 'react';
 export async function POST(req: NextRequest) {
     try {
         const state = await req.json() as QuoteState;
-        const isDownload = req.headers.get('x-action') === 'download-pdf';
+        const action = req.headers.get('x-action');
+        const isDownload = action === 'download-pdf';
+        const isNotifyStep = action === 'notify-step';
 
-        // Generate PDF Stream
-        const path = require('path');
-        const logoPath = path.join(process.cwd(), 'public', 'brand-logo.png');
-        const pdfStream = await renderToStream(<QuotePdf data={state} logoPath={logoPath} />);
+        // Generate PDF Stream (Only if needed)
+        let pdfBuffer: Buffer | null = null;
 
-        // Convert stream to Buffer
-        const chunks: any[] = [];
-        for await (const chunk of pdfStream) {
-            chunks.push(chunk);
+        if (!isNotifyStep) {
+            const path = require('path');
+            const logoPath = path.join(process.cwd(), 'public', 'brand-logo.png');
+            // @ts-ignore
+            const pdfStream = await renderToStream(<QuotePdf data={state} logoPath={logoPath} />);
+            const chunks: any[] = [];
+            for await (const chunk of pdfStream) {
+                chunks.push(chunk);
+            }
+            pdfBuffer = Buffer.concat(chunks);
         }
-        const pdfBuffer = Buffer.concat(chunks);
 
         // If direct download requested, return PDF
-        if (isDownload) {
-            return new NextResponse(pdfBuffer, {
+        if (isDownload && pdfBuffer) {
+            return new NextResponse(pdfBuffer as any, {
                 status: 200,
                 headers: {
                     'Content-Type': 'application/pdf',
@@ -36,27 +41,35 @@ export async function POST(req: NextRequest) {
 
         // Email Sending Logic (Only if config exists)
         if (!process.env.MANAGER_EMAIL || !process.env.FROM_EMAIL || !process.env.RESEND_API_KEY) {
-            // If config missing but NOT download request, return error or maybe just PDF? 
-            // Requirement: "simulateur devis" -> likely wants result. 
-            // Fallback: Return PDF if email fails? 
-            // For now, return error to prompt setup, but DOWNLOAD button handles the user need.
+            // For notification step, specific error or ignore? 
+            if (isNotifyStep) return NextResponse.json({ success: true, warning: "Email config missing" }); // Don't block flow
             return NextResponse.json({ error: "Email configuration missing" }, { status: 500 });
         }
 
         const resend = new Resend(process.env.RESEND_API_KEY);
+        let subject = `✅ Simulation Terminée - ${state.client.firstName} ${state.client.lastName}`;
+        let html = getFinalEmailHtml(state);
+        let attachments: any[] = [];
 
-        // Send Email with Attachment
-        const { data, error } = await resend.emails.send({
-            from: process.env.FROM_EMAIL,
-            to: process.env.MANAGER_EMAIL,
-            subject: `✅ Simulation Terminée - ${state.client.firstName} ${state.client.lastName}`,
-            html: getFinalEmailHtml(state),
-            attachments: [
+        if (isNotifyStep) {
+            html = getStepEmailHtml(state);
+            subject = `🚀 Nouveau Prospect (Étape ${state.step}) - ${state.client.firstName} ${state.client.lastName}`;
+        } else if (pdfBuffer) {
+            attachments = [
                 {
                     filename: `Devis_Celeste_${state.id.slice(0, 6)}.pdf`,
                     content: pdfBuffer,
                 }
-            ]
+            ];
+        }
+
+        // Send Email
+        const { data, error } = await resend.emails.send({
+            from: process.env.FROM_EMAIL,
+            to: process.env.MANAGER_EMAIL,
+            subject: subject,
+            html: html,
+            attachments: attachments
         });
 
         if (error) {

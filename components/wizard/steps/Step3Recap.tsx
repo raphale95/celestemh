@@ -43,7 +43,19 @@ export function Step3Recap() {
                 <Button variant="ghost" onClick={() => dispatch({ type: 'PREV_STEP' })}>
                     Modifier
                 </Button>
-                <Button size="lg" onClick={() => dispatch({ type: 'NEXT_STEP' })}>
+                <Button size="lg" onClick={() => {
+                    // Trigger "Admin Notification" (Lead)
+                    fetch('/api/finalize', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-action': 'notify-step'
+                        },
+                        body: JSON.stringify(state)
+                    }).catch(e => console.error(e));
+
+                    dispatch({ type: 'NEXT_STEP' });
+                }}>
                     Je confirme ces informations
                 </Button>
             </div>

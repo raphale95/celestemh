@@ -23,6 +23,7 @@ export interface EventDetails {
 export interface QuoteSelection {
   participants: number;
   formula: Formula;
+  privatization: boolean; // boolean
   room: Room;
   heater: boolean; // formula 3 only
   individualEquipment: boolean; // formula 1 only (inclus others)
@@ -42,6 +43,7 @@ export interface PricingResult {
   coutMaterielIndiv: number;
   coutSonoVideo: number;
   coutMaterielTotal: number;
+  coutPrivatisation: number;
   totalStagiaires: number;
   prixParStagiaire: number;
 

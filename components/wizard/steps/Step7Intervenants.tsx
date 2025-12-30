@@ -115,11 +115,7 @@ export function Step7Intervenants() {
                             </div>
                         )}
 
-                        {/* Total */}
-                        <div className="flex justify-between items-center pt-2 border-t border-celeste-200 mt-2">
-                            <span className="font-bold text-celeste-main">Total à payer par l'organisateur</span>
-                            <span className="font-bold text-xl text-celeste-main">{pricing.totalOrganisateur.toFixed(2)} €</span>
-                        </div>
+                        {/* Total Line Removed as per request */}
                     </div>
                 </Card>
 

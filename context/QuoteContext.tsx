@@ -28,6 +28,7 @@ const initialState: QuoteState = {
     selection: {
         participants: 8,
         formula: 'essentiel',
+        privatization: false,
         room: 'pina',
         heater: false,
         individualEquipment: false,
@@ -48,7 +49,8 @@ const initialState: QuoteState = {
         animateurPrincipal: { base: 0, discountPercent: 0, percentToPay: 0, amountToPay: 0 },
         totalOrganisateur: 0,
         nbChambresParticipants: 0,
-        nbChambresTotal: 0
+        nbChambresTotal: 0,
+        coutPrivatisation: 0
     }
 };
 

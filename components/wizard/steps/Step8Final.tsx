@@ -7,8 +7,10 @@ import { calculatePricing } from '@/lib/pricing';
 import { QuoteSelection } from '@/lib/types'; // Import type
 import { Check, Download, Send } from 'lucide-react';
 
+// ... imports
+
 export function Step8Final() {
-    const { state } = useQuote();
+    const { state, dispatch } = useQuote();
     const { pricing, selection, event } = state;
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,46 +21,60 @@ export function Step8Final() {
     else if (selection.formula === 'venez_leger') nextFormula = 'cocooning';
 
     let comparisonPricing = null;
-    let comparisonSelection: QuoteSelection | null = null; // Typing fix
+    let comparisonSelection: QuoteSelection | null = null;
 
     if (nextFormula) {
         // Create hypothetical selection
         comparisonSelection = {
             ...selection,
             formula: nextFormula,
-            // Adjust implications
-            // If moving to F2 (Venez Leger): Material Indiv becomes included (logic handles it, but check param).
-            // If moving to F3 (Cocooning): Room prices change, Room count changes (div 2).
-            // Heaters: default to false unless explicitly set? or keep same? F3 allows heater. F1/2 don't.
-            // If we move F2->F3, we can enable heater if it was somehow relevant? No, keep it simple: no heater in comparison unless user had it (impossible).
-            // Just keep other params same, calculatePricing handles the rest.
-            individualEquipment: false, // Inclus
+            // Logic handled in calculatePricing for inclusions
+            // Reset explicit options that become included or irrelevant, 
+            // but strictly speaking, calculatePricing handles inclusions based on formula.
+            // We just need to toggle 'formula'.
+            // We might wanna toggle 'privatization' triggers too? 
+            // If upgrading F1 -> F2, privatization becomes Available. 
+            // But we shouldn't auto-enable it.
         };
         comparisonPricing = calculatePricing(comparisonSelection, event);
     }
 
-    const handleFinalize = async () => {
+    const handleApplyUpgrade = () => {
+        if (comparisonSelection) {
+            dispatch({ type: 'SET_SELECTION', payload: comparisonSelection });
+            // Recalculate will happen via Context Effect
+        }
+    };
+
+    const handleDownloadAndSend = async () => {
         setIsSubmitting(true);
         try {
-            // API Call to /api/finalize
-            const response = await fetch('/api/finalize', {
+            // 1. Send Email / Finalize (Notify Manager)
+            // (The prompt says "Trigger 'Manager Notification' email upon confirmation"... Step 3 or 8? 
+            // Step 3 was "Trigger... upon confirmation". Step 8 is "Download & Send".
+            // I'll assume Step 8 is the final confirmation).
+
+            // 2. Download PDF
+            // We can do this in one or two calls. 
+            // Let's try doing the PDF download. The backend usually generates PDF.
+            // Sending email might be a separate flag or same call.
+            // Calls '/api/finalize' with 'x-action': 'download-pdf' -> returns blob.
+            // Does it also send email?
+            // "Single Button: Download & Send". 
+            // I'll assume I need to trigger email sending separately or modify backend.
+            // For now, I'll sequence them if separate endpoints exist, or just use the download endpoint
+            // and assume backend logs/notifies? 
+            // Actually existing code had separate `handleFinalize` (POST) and `handleDownloadPDF` (POST with header).
+            // I will call both.
+
+            // A. Notify Manager / Save
+            await fetch('/api/finalize', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(state),
             });
-            if (response.ok) {
-                alert("Devis envoyé avec succès !");
-            }
-        } catch (e) {
-            console.error(e);
-            alert("Erreur lors de l'envoi");
-        }
-        setIsSubmitting(false);
-    };
 
-    const handleDownloadPDF = async () => {
-        setIsSubmitting(true);
-        try {
+            // B. Download PDF
             const response = await fetch('/api/finalize', {
                 method: 'POST',
                 headers: {
@@ -78,17 +94,15 @@ export function Step8Final() {
                 a.click();
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
+
+                alert("Votre devis a été envoyé et téléchargé !");
             } else {
-                let errorMsg = "Erreur lors de la génération du PDF.";
-                try {
-                    const err = await response.json();
-                    if (err.error) errorMsg += " (" + JSON.stringify(err.error) + ")";
-                } catch (e) { }
-                alert(errorMsg);
+                throw new Error("Erreur PDF");
             }
+
         } catch (error) {
             console.error(error);
-            alert("Erreur technique lors du téléchargement.");
+            alert("Une erreur est survenue. Vérifiez la console.");
         }
         setIsSubmitting(false);
     };
@@ -114,6 +128,7 @@ export function Step8Final() {
                                 <span>Hébergement & Pension ({selection.participants} pers.)</span>
                                 <span className="font-semibold">{pricing.baseStagiaires.toFixed(2)} €</span>
                             </li>
+                            {/* Only show material if participant pays */}
                             {(pricing.coutMaterielTotal > 0 && selection.materialPaidBy === 'participant') && (
                                 <li className="flex justify-between">
                                     <span>Options / Matériel</span>
@@ -147,6 +162,14 @@ export function Step8Final() {
                                 <span>Location Salle ({selection.room.replace('_', ' + ')})</span>
                                 <span className="font-semibold">{pricing.coutSalleTotal.toFixed(2)} €</span>
                             </li>
+                            {/* Privatization display */}
+                            {pricing.coutPrivatisation > 0 && (
+                                <li className="flex justify-between text-emerald-700">
+                                    <span>Option Privatisation</span>
+                                    <span className="font-semibold">{pricing.coutPrivatisation.toFixed(2)} €</span>
+                                </li>
+                            )}
+
                             {(pricing.coutMaterielTotal > 0 && (selection.materialPaidBy === 'organizer' || !selection.materialPaidBy)) && (
                                 <li className="flex justify-between">
                                     <span>Options / Matériel</span>
@@ -160,20 +183,37 @@ export function Step8Final() {
                         </ul>
                     </div>
                 </div>
+
+                {/* Total Client Logic (Total Global) */}
+                <div className="mt-8 pt-4 border-t-2 border-celeste-100 flex flex-col items-center bg-celeste-50/50 rounded-lg p-4">
+                    <div className="text-sm font-semibold text-celeste-light uppercase tracking-wider mb-1">Total Global Estimé du Séjour</div>
+                    <div className="text-4xl font-bold font-serif text-celeste-main">
+                        {(pricing.totalStagiaires + pricing.totalOrganisateur).toFixed(2)} €
+                    </div>
+                    <p className="text-xs text-celeste-text mt-2 italic max-w-lg text-center">
+                        Ce montant inclut la part stagiaires (hébergement) et la part organisateur.
+                        Le règlement s'effectue généralement : acompte organisateur à la réservation, le solde sur place.
+                    </p>
+                </div>
             </Card>
 
-            {/* Comparison */}
+            {/* Comparison Upsell */}
             {comparisonPricing && nextFormula && (
-                <div className="mt-8 bg-gradient-to-r from-celeste-50 to-white p-6 rounded-xl border border-celeste-gold/30 shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-celeste-gold"></div>
+                <div
+                    onClick={handleApplyUpgrade}
+                    className="mt-8 bg-gradient-to-r from-celeste-50 to-white p-6 rounded-xl border border-celeste-gold/30 shadow-sm relative overflow-hidden group cursor-pointer hover:shadow-md transition-all"
+                >
+                    <div className="absolute top-0 left-0 w-1 h-full bg-celeste-gold group-hover:w-2 transition-all"></div>
                     <div className="md:flex items-center justify-between relative z-10">
                         <div>
-                            <h3 className="font-bold font-serif text-celeste-main text-lg">Envie de plus de confort ?</h3>
+                            <div className="flex items-center gap-2 mb-1">
+                                <h3 className="font-bold font-serif text-celeste-main text-lg">Envie de plus de confort ?</h3>
+                                <div className="bg-celeste-gold text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase animate-pulse">Recommandé</div>
+                            </div>
                             <p className="text-sm text-celeste-light mb-2">
                                 Passez à la formule <span className="font-bold uppercase text-celeste-gold">{nextFormula.replace('_', ' ')}</span> pour seulement :
                             </p>
 
-                            {/* Benefits List */}
                             <ul className="text-xs text-celeste-text list-disc list-inside space-y-1 ml-1 marker:text-celeste-gold">
                                 {nextFormula === 'venez_leger' && (
                                     <>
@@ -191,43 +231,43 @@ export function Step8Final() {
                             </ul>
                         </div>
                         <div className="mt-4 md:mt-0 text-right">
-                            <div className="text-3xl font-bold font-serif text-celeste-gold">
+                            <div className="text-3xl font-bold font-serif text-celeste-gold group-hover:scale-110 transition-transform origin-right">
                                 {comparisonPricing.prixParStagiaire.toFixed(2)} € <span className="text-sm font-normal text-celeste-light font-sans">/ pers</span>
                             </div>
                             <div className="text-sm text-celeste-main font-medium mb-2">
                                 (+{(comparisonPricing.prixParStagiaire - pricing.prixParStagiaire).toFixed(2)} € / pers)
                             </div>
 
-                            {/* Organizer Impact */}
-                            <div className="border-t border-celeste-200 pt-2 mt-2">
-                                <div className="text-xs font-bold text-celeste-main uppercase tracking-wide">Impact Organisateur</div>
-                                <div className={cn(
-                                    "text-lg font-bold",
-                                    comparisonPricing.totalOrganisateur < pricing.totalOrganisateur ? "text-green-600" : "text-celeste-main"
-                                )}>
-                                    {comparisonPricing.totalOrganisateur.toFixed(2)} €
+                            {comparisonPricing && (
+                                <div className="mt-2 mb-2 bg-white/50 p-2 rounded-lg border border-celeste-gold/20">
+                                    <div className="text-sm font-bold text-celeste-main">
+                                        Nouveau Total Orga. : {comparisonPricing.totalOrganisateur.toFixed(2)} €
+                                    </div>
+                                    {(pricing.totalOrganisateur - comparisonPricing.totalOrganisateur) > 1 && (
+                                        <div className="text-xs font-bold text-emerald-600">
+                                            📉 Économie : {(pricing.totalOrganisateur - comparisonPricing.totalOrganisateur).toFixed(2)} €
+                                        </div>
+                                    )}
                                 </div>
-                                <div className={cn(
-                                    "text-sm font-medium",
-                                    comparisonPricing.totalOrganisateur < pricing.totalOrganisateur ? "text-green-600" : "text-celeste-light"
-                                )}>
-                                    {comparisonPricing.totalOrganisateur < pricing.totalOrganisateur
-                                        ? `(Économie de ${(pricing.totalOrganisateur - comparisonPricing.totalOrganisateur).toFixed(2)} € !)`
-                                        : `(+${(comparisonPricing.totalOrganisateur - pricing.totalOrganisateur).toFixed(2)} €)`
-                                    }
-                                </div>
-                            </div>
+                            )}
+
+                            <Button size="sm" variant="outline" className="mt-2 border-celeste-gold text-celeste-gold hover:bg-celeste-gold hover:text-white">
+                                Choisir cette formule
+                            </Button>
                         </div>
                     </div>
                 </div>
             )}
 
-            <div className="flex flex-col md:flex-row gap-4 justify-center pt-8">
-                <Button variant="outline" size="lg" onClick={handleDownloadPDF} className="gap-2">
-                    <Download className="h-4 w-4" /> Télécharger le PDF
+            <div className="flex flex-col md:flex-row gap-4 justify-between pt-8">
+                <Button variant="ghost" onClick={() => dispatch({ type: 'PREV_STEP' })}>
+                    Retour
                 </Button>
-                <Button size="lg" onClick={handleFinalize} disabled={isSubmitting} className="gap-2">
-                    <Send className="h-4 w-4" /> Terminer & Envoyer au gérant
+
+                <Button size="lg" onClick={handleDownloadAndSend} disabled={isSubmitting} className="gap-2 bg-celeste-main hover:bg-celeste-dark text-white shadow-lg shadow-celeste-main/20">
+                    <Download className="h-4 w-4" />
+                    <Send className="h-4 w-4" />
+                    Télécharger & Envoyer
                 </Button>
             </div>
         </div>
