@@ -39,7 +39,7 @@ export function Step4Participants() {
     const { state, dispatch } = useQuote();
 
     const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<ParticipantsFormData>({
-        resolver: zodResolver(participantsSchema),
+        resolver: zodResolver(participantsSchema) as any,
         defaultValues: {
             participants: state.selection.participants,
             formula: state.selection.formula || 'venez_leger',
