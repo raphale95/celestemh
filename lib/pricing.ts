@@ -37,8 +37,9 @@ export function calculatePricing(selection: QuoteSelection, event: EventDetails)
     // 4. Material Costs
     let coutMaterielIndiv = 0;
     if (selection.formula === 'essentiel' && selection.individualEquipment) {
-        // Flat rate per person for the stay (based on +5e/pers request)
-        coutMaterielIndiv = selection.participants * PRICES.OPTIONS.individualMaterial;
+        // Flat rate: 5€/day, max 10€ per person
+        const costPerPerson = Math.min(10, 5 * nights);
+        coutMaterielIndiv = selection.participants * costPerPerson;
     }
 
     let coutSonoVideo = 0;

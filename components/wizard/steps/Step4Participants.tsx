@@ -31,7 +31,7 @@ const FORMULAS = [
         name: '6. Cocooning',
         price: PRICES.FORMULA.cocooning,
         desc: 'Le confort optimal pour vos stagiaires.',
-        features: ['Hébergement Confort (chambres de 2)', 'Pension complète + pause', 'Matériel Yoga inclus', 'Salle Pina à -50%']
+        features: ['Hébergement Confort (chambres de 2)', 'Pension complète + pause', 'Matériel Yoga inclus', 'Linges de lit & toilette inclus', 'Salle Pina à -50%', 'Atelier d’1 heure offert (produits au naturel, speed cooking, zumba)']
     },
 ];
 

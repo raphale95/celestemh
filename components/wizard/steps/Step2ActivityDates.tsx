@@ -137,12 +137,22 @@ export function Step2ActivityDates() {
 
                 {(nights > 0) && (
                     <div className="space-y-4">
-                        <Card className="p-4 bg-celeste-50 border-celeste-100 flex justify-center text-celeste-main font-serif font-bold italic">
-                            Durée du séjour : {nights} nuits
-                        </Card>
-                        <p className="text-xs text-center text-celeste-light italic">
-                            Les horaires d'arrivée et de départ influencent le tarif final mais ne sont pas chiffrés dans ce devis.
-                        </p>
+                        <div className="p-4 rounded-lg border border-emerald-200 bg-emerald-50 text-center animate-in fade-in">
+                            <span className="font-serif text-xl font-bold text-emerald-800">
+                                Durée du séjour : {nights} nuits - soit {nights} pensions complètes
+                            </span>
+                        </div>
+                        {/* Disclaimer */}
+                        <div className="text-xs text-center text-slate-500 space-y-1">
+                            <p className="italic">
+                                ( écart entre les 2 dates et heures exprimé en heure divisées par 24 )
+                            </p>
+                            <p>
+                                Avertissement : les horaires d’arrivée et de départ peuvent influer sur le tarif final en particulier
+                                si une prestation de repas ou de pause supplémentaire est nécessaire.
+                                Le tarif final sera alors affiné directement avec Céleste.
+                            </p>
+                        </div>
                     </div>
                 )}
 

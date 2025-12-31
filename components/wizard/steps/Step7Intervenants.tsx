@@ -41,7 +41,7 @@ export function Step7Intervenants() {
     return (
         <div className="space-y-8">
             <div className="text-center mb-6">
-                <h2 className="text-2xl font-bold font-serif text-celeste-main">L'Équipe d'Animation</h2>
+                <h2 className="text-2xl font-bold font-serif text-celeste-main">Accueil de l'équipe d'animation</h2>
                 <p className="text-celeste-light">Combien d'intervenants animent ce stage ?</p>
             </div>
 
@@ -74,7 +74,7 @@ export function Step7Intervenants() {
 
                 {/* Breakdown Table */}
                 <Card className="p-6 bg-celeste-50/50 border-celeste-100 shadow-sm transition-all hover:bg-celeste-50">
-                    <h3 className="font-bold font-serif text-celeste-main mb-4 border-b border-celeste-200 pb-2">Détail des coûts Organisateur</h3>
+                    <h3 className="font-bold font-serif text-celeste-main mb-4 border-b border-celeste-200 pb-2">Détail des charges</h3>
 
                     <div className="space-y-4">
                         {/* Main Animateur */}
@@ -90,7 +90,7 @@ export function Step7Intervenants() {
                                     {pricing.animateurPrincipal.amountToPay.toFixed(2)} €
                                 </div>
                                 <div className="text-xs text-celeste-light font-medium">
-                                    (Reste à payer : {pricing.animateurPrincipal.percentToPay}%)
+                                    (Participation aux frais de pension : {pricing.animateurPrincipal.percentToPay}%)
                                 </div>
                             </div>
                         </div>
@@ -109,7 +109,7 @@ export function Step7Intervenants() {
                                         {pricing.intervenantSupp.amountToPay.toFixed(2)} €
                                     </div>
                                     <div className="text-xs text-celeste-light font-medium">
-                                        (Reste à payer : {pricing.intervenantSupp.percentToPay}%)
+                                        (Participation aux frais de pension : {pricing.intervenantSupp.percentToPay}%)
                                     </div>
                                 </div>
                             </div>

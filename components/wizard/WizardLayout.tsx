@@ -37,7 +37,11 @@ export function WizardLayout() {
                         </div>
                         <div className="flex flex-col">
                             <span className="font-serif font-bold text-3xl text-celeste-main leading-tight">Céleste</span>
-                            <span className="text-sm text-celeste-light tracking-widest uppercase">38470 Chasselay</span>
+                            <div className="text-sm text-celeste-light tracking-widest uppercase flex flex-col sm:block">
+                                <span>38470 Chasselay</span>
+                                <span className="hidden sm:inline mx-1">-</span>
+                                <span>Havre de bien-être et de créativité</span>
+                            </div>
                         </div>
                     </div>
                     <div className="hidden sm:block text-sm text-celeste-text/60 italic border-l border-celeste-100 pl-4">Simulateur de Devis</div>

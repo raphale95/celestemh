@@ -71,8 +71,8 @@ export function Step1ClientInfo() {
                             className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                         />
                         <div className="space-y-1">
-                            <Label htmlFor="consent" className="font-medium text-emerald-900 cursor-pointer">
-                                J'accepte que mes informations soient transmises au gérant du gîte pour établir un devis.
+                            <Label htmlFor="consent" className="text-sm text-slate-600 font-normal cursor-pointer select-none">
+                                J'accepte que mes informations soient transmises au gérant de Céleste pour établir un devis.
                             </Label>
                             {errors.consent && <p className="text-red-500 text-sm block">{errors.consent.message}</p>}
                         </div>

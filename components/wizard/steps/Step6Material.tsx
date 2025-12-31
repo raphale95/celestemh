@@ -45,66 +45,9 @@ export function Step6Material() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
-                {/* Materiel Individuel */}
-                <Card className={cn("p-6 border-2 transition-all hover:shadow-sm bg-white", isEssentiel ? "border-celeste-100" : "border-emerald-100 bg-emerald-50/20")}>
-                    <div className="flex items-start justify-between">
-                        <div className="space-y-1">
-                            <h3 className="font-bold font-serif text-lg text-celeste-main">Matériel de pratique individuel</h3>
-                            <p className="text-sm text-celeste-text">Tapis de yoga, coussins, couvertures.</p>
-                            {!isEssentiel && <span className="inline-block bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full font-bold mt-1">INCLUS DANS VOTRE FORMULE</span>}
-                        </div>
-
-                        {isEssentiel ? (
-                            <div className="flex flex-col items-end">
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        id="individualEquipment"
-                                        {...register('individualEquipment')}
-                                        className="h-5 w-5 rounded border-celeste-200 text-celeste-main focus:ring-celeste-gold"
-                                    />
-                                    <Label htmlFor="individualEquipment" className="font-bold text-base cursor-pointer text-celeste-main">
-                                        +{PRICES.OPTIONS.individualMaterial} € <span className="text-sm font-normal">/ pers</span>
-                                    </Label>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="text-emerald-600 font-bold">0 €</div>
-                        )}
-                    </div>
-                </Card>
-
-                {/* Sono / Video */}
-                <Card className={cn("p-6 border-2 transition-all hover:shadow-sm bg-white", (!isCocooning) ? "border-celeste-100" : "border-emerald-100 bg-emerald-50/20")}>
-                    <div className="flex items-start justify-between">
-                        <div className="space-y-1">
-                            <h3 className="font-bold font-serif text-lg text-celeste-main">Pack Sono & Vidéo</h3>
-                            <p className="text-sm text-celeste-text">Enceinte puissante, micro, vidéoprojecteur.</p>
-                            {isCocooning && <span className="inline-block bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full font-bold mt-1">INCLUS FORMULE COCOONING</span>}
-                        </div>
-                        {isCocooning ? (
-                            <div className="text-emerald-600 font-bold">0 €</div>
-                        ) : (
-                            <div className="flex flex-col items-end">
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        id="audioVideo"
-                                        {...register('audioVideo')}
-                                        className="h-5 w-5 rounded border-celeste-200 text-celeste-main focus:ring-celeste-gold"
-                                    />
-                                    <Label htmlFor="audioVideo" className="font-bold text-base cursor-pointer text-celeste-main">
-                                        +{PRICES.OPTIONS.sonoVideo} € <span className="text-sm font-normal">/ séjour</span>
-                                    </Label>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </Card>
-
-                {/* Qui paye le matériel ? */}
-                {showPaymentOptions && (
-                    <Card className="p-6 border border-celeste-100 bg-celeste-50/50">
+                {/* Question 3: Payment Options (Only for Essentiel) */}
+                {isEssentiel && (
+                    <Card className="p-6 border border-celeste-100 bg-celeste-50/50 mb-6">
                         <h3 className="font-bold font-serif text-lg text-celeste-main mb-2">Qui prend en charge le matériel individuel ?</h3>
                         <p className="text-sm text-celeste-light mb-4">Pour info : Le Pack Sono & Vidéo est toujours à la charge de l'organisateur.</p>
 
@@ -138,11 +81,66 @@ export function Step6Material() {
                                     {...register('materialPaidBy')}
                                 />
                                 <div className="font-bold text-celeste-main">Les Participants</div>
-                                <div className="text-xs text-celeste-light">Payé sur place (0€ devis)</div>
+                                <div className="text-xs text-celeste-light">5 € par jour et 10€ au maximum</div>
                             </label>
                         </div>
                     </Card>
                 )}
+
+                {/* 1. Materiel Individuel */}
+                <Card className={cn("p-6 border-2 transition-all hover:shadow-sm bg-white", isEssentiel ? "border-celeste-100" : "border-emerald-100 bg-emerald-50/20")}>
+                    <div className="flex items-center justify-between">
+                        <div className="space-y-1">
+                            <h3 className="font-bold font-serif text-lg text-celeste-main">Matériel de pratique individuel</h3>
+                            <p className="text-sm text-celeste-text">Tapis de yoga , briques, zafu & plaid.</p>
+                        </div>
+
+                        {isEssentiel ? (
+                            <div className="flex flex-col items-end">
+                                <div className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        id="individualEquipment"
+                                        {...register('individualEquipment')}
+                                        className="h-5 w-5 rounded border-celeste-200 text-celeste-main focus:ring-celeste-gold"
+                                    />
+                                    <Label htmlFor="individualEquipment" className="font-bold text-base cursor-pointer text-celeste-main">
+                                        +{PRICES.OPTIONS.individualMaterial} € <span className="text-sm font-normal">/ pers</span>
+                                    </Label>
+                                </div>
+                            </div>
+                        ) : (
+                            <span className="text-red-600 font-bold text-lg uppercase">INCLUS</span>
+                        )}
+                    </div>
+                </Card>
+
+                {/* 2. Sono / Video */}
+                <Card className={cn("p-6 border-2 transition-all hover:shadow-sm bg-white", (!isCocooning) ? "border-celeste-100" : "border-emerald-100 bg-emerald-50/20")}>
+                    <div className="flex items-center justify-between">
+                        <div className="space-y-1">
+                            <h3 className="font-bold font-serif text-lg text-celeste-main">Pack Sono & Vidéo</h3>
+                            <p className="text-sm text-celeste-text">2 enceintes jbl connectées , videoprojecteur , écran.</p>
+                        </div>
+                        {isCocooning ? (
+                            <span className="text-red-600 font-bold text-lg uppercase">INCLUS</span>
+                        ) : (
+                            <div className="flex flex-col items-end">
+                                <div className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        id="audioVideo"
+                                        {...register('audioVideo')}
+                                        className="h-5 w-5 rounded border-celeste-200 text-celeste-main focus:ring-celeste-gold"
+                                    />
+                                    <Label htmlFor="audioVideo" className="font-bold text-base cursor-pointer text-celeste-main">
+                                        +{PRICES.OPTIONS.sonoVideo} € <span className="text-sm font-normal">/ séjour</span>
+                                    </Label>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </Card>
 
                 <div className="flex justify-between pt-6">
                     <Button type="button" variant="ghost" onClick={() => dispatch({ type: 'PREV_STEP' })}>
