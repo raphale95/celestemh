@@ -5,6 +5,7 @@ import { useQuote } from '@/context/QuoteContext';
 import { Button, Card, cn } from '@/components/ui';
 import { calculatePricing } from '@/lib/pricing';
 import { QuoteSelection } from '@/lib/types'; // Import type
+import { differenceInCalendarDays } from 'date-fns';
 import { Check, Download, Send } from 'lucide-react';
 
 // ... imports
@@ -12,6 +13,11 @@ import { Check, Download, Send } from 'lucide-react';
 export function Step8Final() {
     const { state, dispatch } = useQuote();
     const { pricing, selection, event } = state;
+
+    // Privatization Logic
+    const nights = (event.startDate && event.endDate) ? Math.max(0, differenceInCalendarDays(event.endDate, event.startDate)) : 0;
+    const emptyRooms = Math.max(0, 10 - pricing.nbChambresTotal);
+    const privatizationCostInfo = emptyRooms * 100 * nights;
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -122,7 +128,7 @@ export function Step8Final() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                     <div>
-                        <h3 className="font-bold font-serif text-celeste-main text-lg mb-4 border-b border-celeste-100 pb-2">Détails Stagiaires</h3>
+                        <h3 className="font-bold font-serif text-celeste-main text-lg mb-4 border-b border-celeste-100 pb-2">Pension complète par stagiaire</h3>
                         <ul className="space-y-3 text-sm text-celeste-text">
                             <li className="flex justify-between">
                                 <span>Hébergement & Pension ({selection.participants} pers.)</span>
@@ -136,7 +142,7 @@ export function Step8Final() {
                                 </li>
                             )}
                             <li className="border-t border-celeste-200 pt-2 flex justify-between font-bold text-lg text-celeste-gold">
-                                <span>Total Stagiaires</span>
+                                <span>Total pour {selection.participants} stagiaires</span>
                                 <span>{pricing.totalStagiaires.toFixed(2)} €</span>
                             </li>
                             <li className="text-right text-xs text-celeste-light">
@@ -149,7 +155,7 @@ export function Step8Final() {
                         <h3 className="font-bold font-serif text-celeste-main text-lg mb-4 border-b border-celeste-100 pb-2">Détails Organisateur</h3>
                         <ul className="space-y-3 text-sm text-celeste-text">
                             <li className="flex justify-between">
-                                <span>Animateur Principal <span className="text-celeste-gold text-xs">(-{pricing.animateurPrincipal.discountPercent}%)</span></span>
+                                <span>Participation aux frais de pension <span className="text-celeste-gold text-xs">(-{pricing.animateurPrincipal.discountPercent}%)</span></span>
                                 <span className="font-semibold">{pricing.animateurPrincipal.amountToPay.toFixed(2)} €</span>
                             </li>
                             {pricing.intervenantSupp && (
@@ -190,12 +196,28 @@ export function Step8Final() {
                     <div className="text-4xl font-bold font-serif text-celeste-main">
                         {(pricing.totalStagiaires + pricing.totalOrganisateur).toFixed(2)} €
                     </div>
-                    <p className="text-xs text-celeste-text mt-2 italic max-w-lg text-center">
-                        Ce montant inclut la part stagiaires (hébergement) et la part organisateur.
-                        Le règlement s'effectue généralement : acompte organisateur à la réservation, le solde sur place.
-                    </p>
+                    <div className="text-xs text-celeste-text mt-2 italic max-w-lg text-center space-y-2">
+                        <p>
+                            Sur le principe afin de réserver, l’organisateur versera un acompte au moment de la signature du contrat ; le solde du séjour devant être régler au plus tard 15 jours avant l’arrivée . ( soit par l’organisateur ou soit par les participants)
+                        </p>
+                        <p>
+                            Les options laissées à l’appréciation des participants sont à régler sur place.
+                        </p>
+                    </div>
                 </div>
             </Card>
+
+            {/* Privatization Info Block */}
+            {(!selection.privatization && emptyRooms > 0) && (
+                <Card className="mt-8 p-6 bg-amber-50/50 border-2 border-amber-200 text-center space-y-2 dashed-border">
+                    <p className="text-celeste-main text-lg">
+                        Pour que Céleste soit le cocon exclusif de votre retraite, optez pour la privatisation de nos 10 chambres pour un montant de <span className="font-bold text-celeste-gold">{privatizationCostInfo.toFixed(2)} €</span>
+                    </p>
+                    <p className="text-xs text-celeste-light italic">
+                        ( = (10 - {pricing.nbChambresTotal} chambres prises) * {nights} nuitée(s) * 100 )
+                    </p>
+                </Card>
+            )}
 
             {/* Comparison Upsell */}
             {comparisonPricing && nextFormula && (
@@ -243,8 +265,8 @@ export function Step8Final() {
                                     <div className="text-sm font-bold text-celeste-main">
                                         Nouveau Total Orga. : {comparisonPricing.totalOrganisateur.toFixed(2)} €
                                     </div>
-                                    {(pricing.totalOrganisateur - comparisonPricing.totalOrganisateur) > 1 && (
-                                        <div className="text-xs font-bold text-emerald-600">
+                                    {(nextFormula === 'cocooning' && (pricing.totalOrganisateur - comparisonPricing.totalOrganisateur) > 1) && (
+                                        <div className="text-lg font-bold text-emerald-600 animate-pulse">
                                             📉 Économie : {(pricing.totalOrganisateur - comparisonPricing.totalOrganisateur).toFixed(2)} €
                                         </div>
                                     )}

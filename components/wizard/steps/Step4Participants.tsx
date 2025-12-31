@@ -14,21 +14,21 @@ type ParticipantsFormData = z.infer<typeof participantsSchema>;
 const FORMULAS = [
     {
         id: 'essentiel',
-        name: '4. Essentiel',
+        name: 'Essentiel',
         price: PRICES.FORMULA.essentiel,
         desc: 'L’offre accessible pour tous vos stages.',
         features: ['Hébergement standard (chambres de 3)', 'Pension complète + pause', 'Matériel Yoga en option (+5€)', 'Linges de lit en option (+12€)']
     },
     {
         id: 'venez_leger',
-        name: '5. Venez Léger',
+        name: 'Venez Léger',
         price: PRICES.FORMULA.venez_leger,
         desc: 'Tout inclus pour voyager l’esprit libre.',
         features: ['Hébergement standard (chambres de 3)', 'Pension complète + pause', 'Matériel Yoga inclus', 'Linges de lit & toilette inclus']
     },
     {
         id: 'cocooning',
-        name: '6. Cocooning',
+        name: 'Cocooning',
         price: PRICES.FORMULA.cocooning,
         desc: 'Le confort optimal pour vos stagiaires.',
         features: ['Hébergement Confort (chambres de 2)', 'Pension complète + pause', 'Matériel Yoga inclus', 'Linges de lit & toilette inclus', 'Salle Pina à -50%', 'Atelier d’1 heure offert (produits au naturel, speed cooking, zumba)']
