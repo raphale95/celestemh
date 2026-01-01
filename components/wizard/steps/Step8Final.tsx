@@ -141,6 +141,13 @@ export function Step8Final() {
                                     <span className="font-semibold">{pricing.coutMaterielTotal.toFixed(2)} €</span>
                                 </li>
                             )}
+                            {/* Privatization display moved to Stagiaires */}
+                            {pricing.coutPrivatisation > 0 && (
+                                <li className="flex justify-between text-emerald-700">
+                                    <span>Option Privatisation</span>
+                                    <span className="font-semibold">{pricing.coutPrivatisation.toFixed(2)} €</span>
+                                </li>
+                            )}
                             <li className="border-t border-celeste-200 pt-2 flex justify-between font-bold text-lg text-celeste-gold">
                                 <span>Total pour {selection.participants} stagiaires</span>
                                 <span>{pricing.totalStagiaires.toFixed(2)} €</span>
@@ -168,13 +175,7 @@ export function Step8Final() {
                                 <span>Location Salle ({selection.room.replace('_', ' + ')})</span>
                                 <span className="font-semibold">{pricing.coutSalleTotal.toFixed(2)} €</span>
                             </li>
-                            {/* Privatization display */}
-                            {pricing.coutPrivatisation > 0 && (
-                                <li className="flex justify-between text-emerald-700">
-                                    <span>Option Privatisation</span>
-                                    <span className="font-semibold">{pricing.coutPrivatisation.toFixed(2)} €</span>
-                                </li>
-                            )}
+
 
                             {(pricing.coutMaterielTotal > 0 && (selection.materialPaidBy === 'organizer' || !selection.materialPaidBy)) && (
                                 <li className="flex justify-between">

@@ -78,7 +78,10 @@ export function Step4Participants() {
                         {FORMULAS.map((f) => (
                             <div
                                 key={f.id}
-                                onClick={() => setValue('formula', f.id as any)}
+                                onClick={() => {
+                                    setValue('formula', f.id as any);
+                                    if (f.id === 'essentiel') setValue('privatization', false);
+                                }}
                                 className={cn(
                                     "cursor-pointer rounded-xl border-2 p-4 transition-all hover:shadow-md relative overflow-hidden group",
                                     selectedFormula === f.id
