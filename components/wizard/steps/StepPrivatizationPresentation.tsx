@@ -53,9 +53,7 @@ export function StepPrivatizationPresentation() {
                     </div>
                 </div>
 
-                <p className="text-xs text-center text-celeste-light italic mt-6">
-                    Ce montant sera ajouté à la facture de l'organisateur.
-                </p>
+
 
                 <div className="flex items-center justify-center gap-3 mt-6 p-4 border-t border-celeste-100">
                     <input
