@@ -123,7 +123,7 @@ export function Step4Participants() {
                                     Option Privatisation du lieu
                                 </Label>
                                 <p className="text-sm text-slate-600">
-                                    Garanti l'exclusivité du lieu (+100€/nuit par chambre vide restante).
+                                    Garantit l'exclusivité du lieu (+100€/nuit par chambre vide restante).
                                 </p>
                             </div>
                         </div>

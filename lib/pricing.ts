@@ -148,12 +148,19 @@ export function calculatePricing(selection: QuoteSelection, event: EventDetails)
         totalOrganisateur += intervenantSupp.amountToPay;
     }
 
-    // Add Room + Privatization (Organizer pays)
+    // Add Room (Organizer pays)
     totalOrganisateur += coutSalleTotal;
-    totalOrganisateur += coutPrivatisation;
+
+    // Privatization is now paid by Stagiaires (added to totalStagiaires below)
 
     // Add Material (if designated)
     totalOrganisateur += totalMaterialOrganisateur;
+
+    // Privatization is OUT of Stagiaire Total (per user request)
+    // totalStagiaires += coutPrivatisation; // REVERTED
+
+    // Recalculate without Privatization
+    const finalPrixParStagiaire = selection.participants > 0 ? (totalStagiaires / selection.participants) : 0;
 
     return {
         baseStagiaires,
@@ -163,8 +170,8 @@ export function calculatePricing(selection: QuoteSelection, event: EventDetails)
         coutMaterielIndiv,
         coutSonoVideo,
         coutMaterielTotal,
-        totalStagiaires,
-        prixParStagiaire,
+        totalStagiaires, // Does NOT include privatization anymore
+        prixParStagiaire: finalPrixParStagiaire,
         animateurPrincipal,
         intervenantSupp,
         totalOrganisateur,

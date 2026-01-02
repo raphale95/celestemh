@@ -144,13 +144,10 @@ export function Step2ActivityDates() {
                         </div>
                         {/* Disclaimer */}
                         <div className="text-xs text-center text-slate-500 space-y-1">
-                            <p className="italic">
-                                ( écart entre les 2 dates et heures exprimé en heure divisées par 24 )
-                            </p>
+
                             <p>
-                                Avertissement : les horaires d’arrivée et de départ peuvent influer sur le tarif final en particulier
-                                si une prestation de repas ou de pause supplémentaire est nécessaire.
-                                Le tarif final sera alors affiné directement avec Céleste.
+                                <span className="font-bold text-lg text-emerald-800 uppercase block mb-1">Information Importante :</span>
+                                Les horaires d’arrivée et de départ peuvent influer sur le tarif final en particulier si une prestation de repas ou de pause supplémentaire est nécessaire. Le tarif final sera alors affiné directement avec Céleste.
                             </p>
                         </div>
                     </div>

@@ -37,10 +37,9 @@ export function WizardLayout() {
                         </div>
                         <div className="flex flex-col">
                             <span className="font-serif font-bold text-3xl text-celeste-main leading-tight">Céleste</span>
-                            <div className="text-sm text-celeste-light tracking-widest uppercase flex flex-col sm:block">
+                            <div className="flex flex-col text-sm text-celeste-light tracking-widest uppercase items-start">
                                 <span>38470 Chasselay</span>
-                                <span className="hidden sm:inline mx-1">-</span>
-                                <span>Havre de bien-être et de créativité</span>
+                                <span>Havre de paix et de créativité</span>
                             </div>
                         </div>
                     </div>
@@ -81,10 +80,17 @@ export function WizardLayout() {
                         </div>
                     </div>
 
-                    {/* Sidebar */}
-                    <div className="lg:col-span-4 hidden lg:block">
-                        <SummarySidebar />
-                    </div>
+                    {/* Sidebar - Visible only on Final Step (Step 8/9 depends on logic, but user said '7 first pages') 
+                       Total steps is 8 or 9. If showPrivatization changes step count.
+                       Actually, let's just show it on the last step? Or step >= 8?
+                       User said "enleve sur les 7 premiere page".
+                       So Steps 1-7 hidden. Step 8+ shown.
+                    */}
+                    {step >= 8 && (
+                        <div className="lg:col-span-4 hidden lg:block">
+                            <SummarySidebar />
+                        </div>
+                    )}
 
                     {/* Mobile Summary Trigger (Optional, maybe specific mobile UI later) */}
                 </div>

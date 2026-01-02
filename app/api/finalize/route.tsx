@@ -54,6 +54,25 @@ export async function POST(req: NextRequest) {
         if (isNotifyStep) {
             html = getStepEmailHtml(state);
             subject = `🚀 Nouveau Prospect (Étape ${state.step}) - ${state.client.firstName} ${state.client.lastName}`;
+        } else if (action === 'send-question') {
+            // New Question Action
+            // Body already parsed into 'state' above.
+            // Safest: Body is { ...state, question: "..." } or handle raw body.
+            // Let's rely on the frontend sending { ...state, userQuestion: "..." }
+            const question = (state as any).userQuestion || "Pas de question spécifiée.";
+            subject = `❓ Nouvelle Question - ${state.client.firstName} ${state.client.lastName}`;
+            html = `
+                <h1>Nouvelle question d'un prospect</h1>
+                <p><strong>Client:</strong> ${state.client.firstName} ${state.client.lastName} (${state.client.email})</p>
+                <p><strong>Téléphone:</strong> ${state.client.phone}</p>
+                <hr />
+                <p><strong>Question:</strong></p>
+                <p style="background-color: #f3f4f6; padding: 15px; border-left: 4px solid #059669; font-style: italic;">
+                    ${question.replace(/\n/g, '<br/>')}
+                </p>
+                <hr />
+                <p><a href="mailto:${state.client.email}">Répondre au client</a></p>
+            `;
         } else if (pdfBuffer) {
             attachments = [
                 {

@@ -127,6 +127,25 @@ export const QuotePdf = ({ data, logoPath }: { data: QuoteState, logoPath?: stri
                     </View>
                 )}
 
+                {/* Privatization - Separated in PDF too */}
+                {pricing.coutPrivatisation > 0 && (
+                    <View style={styles.section}>
+                        <Text style={styles.h2}>Option Privatisation</Text>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Coût Global Privatisation</Text>
+                            <Text style={styles.value}>{pricing.coutPrivatisation.toFixed(2)} €</Text>
+                        </View>
+                    </View>
+                )}
+
+                {/* Grand Total */}
+                <View style={{ marginTop: 10, padding: 10, border: '2 solid #800020', borderRadius: 6, alignItems: 'center' }}>
+                    <Text style={{ fontSize: 10, color: '#800020', fontWeight: 'bold', marginBottom: 4 }}>TOTAL SÉJOUR ESTIMÉ</Text>
+                    <Text style={{ fontSize: 18, color: '#800020', fontWeight: 'bold' }}>
+                        {(pricing.totalStagiaires + pricing.totalOrganisateur + pricing.coutPrivatisation).toFixed(2)} €
+                    </Text>
+                </View>
+
                 <Text style={{ marginTop: 20, fontSize: 10, color: '#800020' }}>
                     Ce document est une simulation tarifaire et ne constitue pas une réservation ferme.
                     Veuillez contacter le gérant pour valider les disponibilités.

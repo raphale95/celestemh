@@ -49,7 +49,7 @@ export function Step6Material() {
                 {isEssentiel && (
                     <Card className="p-6 border border-celeste-100 bg-celeste-50/50 mb-6">
                         <h3 className="font-bold font-serif text-lg text-celeste-main mb-2">Qui prend en charge le matériel individuel ?</h3>
-                        <p className="text-sm text-celeste-light mb-4">Pour info : Le Pack Sono & Vidéo est toujours à la charge de l'organisateur.</p>
+                        <p className="text-sm text-celeste-light mb-4">(à payer sur place)</p>
 
                         <div className="flex gap-4">
                             <label className={cn(

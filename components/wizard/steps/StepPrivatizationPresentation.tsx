@@ -24,7 +24,7 @@ export function StepPrivatizationPresentation() {
                         <h3 className="font-bold font-serif text-xl text-celeste-main">Votre Garantie d'Exclusivité</h3>
                         <p className="text-celeste-text">
                             En choisissant l'option privatisation, vous réservez l'intégralité du lieu pour votre groupe.
-                            Cela garantit qu'aucun autre groupe ou individu ne sera présent sur le site pendant votre séjour.
+                            Cela garantit qu'aucun autre groupe ou individuel ne sera présent sur le site pendant votre séjour.
                         </p>
 
                         <div className="bg-white p-4 rounded-lg shadow-sm border border-celeste-100 mt-4">
@@ -39,7 +39,7 @@ export function StepPrivatizationPresentation() {
                                     <span className="font-bold">{Math.max(0, 10 - pricing.nbChambresTotal)}</span>
                                 </li>
                                 <li className="flex justify-between border-t border-celeste-100 pt-2 mt-2 font-semibold">
-                                    <span>Coût par nuit (100€ / chambre vide) :</span>
+                                    <span>Coût par nuit (100€ / chambre vacante) :</span>
                                     <span>{Math.max(0, 10 - pricing.nbChambresTotal) * 100} €</span>
                                 </li>
                             </ul>
