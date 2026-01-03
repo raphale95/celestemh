@@ -155,7 +155,7 @@ export const QuotePdf = ({ data, logoPath }: { data: QuoteState, logoPath?: stri
                 </Text>
 
                 <Text style={styles.footer}>
-                    Céleste - 814 route du midi, 38470 Chasselay - www.celestemaisondhotes.fr
+                    Céleste - 814 route du midi, 38470 Chasselay
                 </Text>
             </Page>
         </Document>

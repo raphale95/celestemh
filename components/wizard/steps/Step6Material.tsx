@@ -57,7 +57,7 @@ export function Step6Material() {
                 {/* Question 3: Payment Options (Only for Essentiel) */}
                 {isEssentiel && (
                     <Card className="p-6 border border-celeste-100 bg-celeste-50/50 mb-6">
-                        <h3 className="font-bold font-serif text-lg text-celeste-main mb-2">Qui prend en charge le matériel individuel ?</h3>
+                        <h3 className="font-bold font-serif text-lg text-celeste-main mb-2">Qui prend en charge le matériel de pratique individuel ?</h3>
 
                         <div className="flex gap-4">
                             <label className={cn(
