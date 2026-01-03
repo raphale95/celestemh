@@ -32,6 +32,7 @@ export const QuotePdf = ({ data, logoPath }: { data: QuoteState, logoPath?: stri
             <Page size="A4" style={styles.page}>
 
                 {/* Header */}
+                {/* Header */}
                 <View style={styles.header}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {logoPath && (
@@ -41,8 +42,10 @@ export const QuotePdf = ({ data, logoPath }: { data: QuoteState, logoPath?: stri
                             />
                         )}
                         <View>
-                            <Text style={styles.brand}>Céleste Maison d'Hôtes</Text>
+                            <Text style={styles.brand}>Céleste</Text>
                             <Text style={styles.label}>Devis estimatif</Text>
+                            <Text style={{ fontSize: 9, marginTop: 4, color: '#2D2426' }}>814 route du midi, 38470 Chasselay</Text>
+                            <Text style={{ fontSize: 9, color: '#2D2426' }}>contact@celeste-vercors.com | 06 38 30 05 88</Text>
                         </View>
                     </View>
                     <View style={{ alignItems: 'flex-end', justifyContent: 'center' }}>
@@ -152,7 +155,7 @@ export const QuotePdf = ({ data, logoPath }: { data: QuoteState, logoPath?: stri
                 </Text>
 
                 <Text style={styles.footer}>
-                    Céleste Maison d'Hôtes - www.celestemaisondhotes.fr - Généré automatiquement
+                    Céleste - 814 route du midi, 38470 Chasselay - www.celestemaisondhotes.fr
                 </Text>
             </Page>
         </Document>

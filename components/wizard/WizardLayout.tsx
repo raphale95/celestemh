@@ -39,7 +39,7 @@ export function WizardLayout() {
                             <span className="font-serif font-bold text-3xl text-celeste-main leading-tight">Céleste</span>
                             <div className="flex flex-col text-sm text-celeste-light tracking-widest uppercase items-start">
                                 <span>38470 Chasselay</span>
-                                <span>Havre de paix et de créativité</span>
+                                <span>Havre de bien être et de créativité</span>
                             </div>
                         </div>
                     </div>

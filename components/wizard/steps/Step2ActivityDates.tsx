@@ -139,7 +139,7 @@ export function Step2ActivityDates() {
                     <div className="space-y-4">
                         <div className="p-4 rounded-lg border border-emerald-200 bg-emerald-50 text-center animate-in fade-in">
                             <span className="font-serif text-xl font-bold text-emerald-800">
-                                Durée du séjour : {nights} nuits - soit {nights} pensions complètes
+                                Durée du séjour : {nights + 1} jours / {nights} nuits - soit {nights} pensions complètes
                             </span>
                         </div>
                         {/* Disclaimer */}

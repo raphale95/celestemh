@@ -13,11 +13,11 @@ type MaterialsFormData = z.infer<typeof materialsSchema>;
 
 export function Step6Material() {
     const { state, dispatch } = useQuote();
-    const { selection, pricing } = state;
+    const { selection } = state;
     const isEssentiel = selection.formula === 'essentiel';
     const isCocooning = selection.formula === 'cocooning';
 
-    const { register, handleSubmit, watch } = useForm<MaterialsFormData>({
+    const { register, handleSubmit, watch, setValue } = useForm<MaterialsFormData>({
         resolver: zodResolver(materialsSchema) as any,
         defaultValues: {
             individualEquipment: selection.individualEquipment,
@@ -31,10 +31,19 @@ export function Step6Material() {
         dispatch({ type: 'NEXT_STEP' });
     };
 
+    // Auto-select logic
+    React.useEffect(() => {
+        const paidBy = watch('materialPaidBy');
+        if (paidBy === 'organizer') {
+            setValue('individualEquipment', true);
+        } else if (paidBy === 'participant') {
+            setValue('individualEquipment', false);
+        }
+    }, [watch('materialPaidBy'), setValue]);
+
     // Determine if there are costs to pay
     const hasEquipmentCost = watch('individualEquipment') && isEssentiel;
     const hasAudioVideoCost = watch('audioVideo') && !isCocooning;
-    const showPaymentOptions = hasEquipmentCost;
 
     return (
         <div className="space-y-6">
@@ -49,7 +58,6 @@ export function Step6Material() {
                 {isEssentiel && (
                     <Card className="p-6 border border-celeste-100 bg-celeste-50/50 mb-6">
                         <h3 className="font-bold font-serif text-lg text-celeste-main mb-2">Qui prend en charge le matériel individuel ?</h3>
-                        <p className="text-sm text-celeste-light mb-4">(à payer sur place)</p>
 
                         <div className="flex gap-4">
                             <label className={cn(
@@ -81,7 +89,7 @@ export function Step6Material() {
                                     {...register('materialPaidBy')}
                                 />
                                 <div className="font-bold text-celeste-main">Les Participants</div>
-                                <div className="text-xs text-celeste-light">5 € par jour et 10€ au maximum</div>
+                                <div className="text-xs text-celeste-light">5 € par personne pour tout le séjour</div>
                             </label>
                         </div>
                     </Card>
@@ -97,17 +105,23 @@ export function Step6Material() {
 
                         {isEssentiel ? (
                             <div className="flex flex-col items-end">
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        id="individualEquipment"
-                                        {...register('individualEquipment')}
-                                        className="h-5 w-5 rounded border-celeste-200 text-celeste-main focus:ring-celeste-gold"
-                                    />
-                                    <Label htmlFor="individualEquipment" className="font-bold text-base cursor-pointer text-celeste-main">
-                                        +{PRICES.OPTIONS.individualMaterial} € <span className="text-sm font-normal">/ pers</span>
-                                    </Label>
-                                </div>
+                                {watch('materialPaidBy') === 'participant' ? (
+                                    <div className="text-celeste-main font-bold text-sm bg-celeste-50 px-3 py-1 rounded whitespace-nowrap">
+                                        À payer sur place : +{PRICES.OPTIONS.individualMaterial} € <span className="text-xs font-normal">/ pers / séjour</span>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center space-x-2">
+                                        <input
+                                            type="checkbox"
+                                            id="individualEquipment"
+                                            {...register('individualEquipment')}
+                                            className="h-5 w-5 rounded border-celeste-200 text-celeste-main focus:ring-celeste-gold"
+                                        />
+                                        <Label htmlFor="individualEquipment" className="font-bold text-base cursor-pointer text-celeste-main whitespace-nowrap">
+                                            +{PRICES.OPTIONS.individualMaterial} € <span className="text-sm font-normal">/ pers</span>
+                                        </Label>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <span className="text-red-600 font-bold text-lg uppercase">INCLUS</span>
@@ -133,7 +147,7 @@ export function Step6Material() {
                                         {...register('audioVideo')}
                                         className="h-5 w-5 rounded border-celeste-200 text-celeste-main focus:ring-celeste-gold"
                                     />
-                                    <Label htmlFor="audioVideo" className="font-bold text-base cursor-pointer text-celeste-main">
+                                    <Label htmlFor="audioVideo" className="font-bold text-base cursor-pointer text-celeste-main whitespace-nowrap">
                                         +{PRICES.OPTIONS.sonoVideo} € <span className="text-sm font-normal">/ séjour</span>
                                     </Label>
                                 </div>

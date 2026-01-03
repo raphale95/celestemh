@@ -34,7 +34,7 @@ export function Step3Recap() {
                         <p><span className="font-medium text-slate-500">Activité :</span> <span className="capitalize">{event.activity}</span></p>
                         <p><span className="font-medium text-slate-500">Arrivée :</span> {event.startDate ? format(event.startDate, 'dd MMMM yyyy', { locale: fr }) : '-'} {event.startTime ? `à ${event.startTime}` : ''}</p>
                         <p><span className="font-medium text-slate-500">Départ :</span> {event.endDate ? format(event.endDate, 'dd MMMM yyyy', { locale: fr }) : '-'} {event.endTime ? `à ${event.endTime}` : ''}</p>
-                        <p><span className="font-medium text-slate-500">Durée :</span> {event.nights} nuits</p>
+                        <p><span className="font-medium text-slate-500">Durée :</span> {event.nights + 1} jours / {event.nights} nuits</p>
                     </div>
                 </Card>
             </div>

@@ -147,7 +147,7 @@ export function Step8Final() {
                                 </div>
                                 <div className="text-right">
                                     {/* Top Price removed as requested */}
-                                    <span className="block text-xs text-celeste-light uppercase tracking-wider font-bold mb-1">Hébergement & Pension</span>
+                                    <span className="block text-xs text-celeste-light uppercase tracking-wider font-bold mb-1">Pension stagiaire</span>
                                 </div>
                             </div>
 
@@ -177,7 +177,7 @@ export function Step8Final() {
                             )}
                             <li className="border-t border-celeste-200 pt-2 flex justify-between items-center font-bold text-lg text-celeste-gold">
                                 <span>Total pour {selection.participants} stagiaires</span>
-                                <span>{pricing.totalStagiaires.toFixed(2)} €</span>
+                                <span className="whitespace-nowrap">{pricing.totalStagiaires.toFixed(2)} €</span>
                             </li>
                         </ul>
                     </div>
@@ -277,13 +277,13 @@ export function Step8Final() {
                             </ul>
 
                             <div className="mt-4 p-3 bg-white rounded-lg border border-celeste-100 inline-block shadow-sm">
-                                <div className="text-xs text-celeste-light uppercase tracking-wider mb-1">Nouveau Coût Organisateur</div>
+                                <div className="text-xs text-celeste-light uppercase tracking-wider mb-1">Nouveau Coût TOTAL du séjour</div>
                                 <div className="text-3xl font-bold text-celeste-main">
-                                    {comparisonPricing.totalOrganisateur.toFixed(2)} €
+                                    {(comparisonPricing.totalStagiaires + comparisonPricing.totalOrganisateur + pricing.coutPrivatisation).toFixed(2)} €
                                 </div>
-                                {pricing.totalOrganisateur > comparisonPricing.totalOrganisateur && (
+                                {((pricing.totalStagiaires + pricing.totalOrganisateur) > (comparisonPricing.totalStagiaires + comparisonPricing.totalOrganisateur)) && (
                                     <div className="text-sm font-bold text-emerald-600 mt-1">
-                                        Vous économisez {(pricing.totalOrganisateur - comparisonPricing.totalOrganisateur).toFixed(2)} € !
+                                        Vous économisez {((pricing.totalStagiaires + pricing.totalOrganisateur) - (comparisonPricing.totalStagiaires + comparisonPricing.totalOrganisateur)).toFixed(2)} € !
                                     </div>
                                 )}
                             </div>
@@ -292,7 +292,7 @@ export function Step8Final() {
                         <div className="text-right border-l border-celeste-200 pl-6 flex flex-col items-end gap-3">
                             <div>
                                 <div className="text-sm text-celeste-light mb-1">Prix par stagiaire</div>
-                                <div className="text-4xl font-bold font-serif text-celeste-gold">
+                                <div className="text-4xl font-bold font-serif text-celeste-gold whitespace-nowrap">
                                     {comparisonPricing.prixParStagiaire.toFixed(2)} €
                                 </div>
                                 <div className="text-xs text-celeste-text/50">/ pers</div>
