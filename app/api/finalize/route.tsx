@@ -84,13 +84,9 @@ export async function POST(req: NextRequest) {
 
         // Send Email
         const GINO_EMAIL = "gino.ronco@co-gite.fr";
-        const CONTACT_EMAIL = "contact@celeste-vercors.com";
 
-        let recipient = CONTACT_EMAIL; // Default
-
-        if (isNotifyStep) {
-            recipient = GINO_EMAIL;
-        }
+        // Per user request, send everything to Gino
+        let recipient = GINO_EMAIL;
 
         // Use Resend to send
         const { data, error } = await resend.emails.send({
